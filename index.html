@@ -410,6 +410,7 @@
     <script>
         const MC_IP  = 'play.minehostil.org';
         const DS_ID  = '1268063065961435227';
+        const DS_MEMBERS = 180; // ← Cambia este número manualmente
 
         /* ── Stats ── */
         async function updateStats() {
@@ -420,24 +421,7 @@
                     d.online ? `${d.players.online} Conectados` : 'Offline';
             } catch { document.getElementById('mc-status').textContent = 'Error'; }
 
-            const dsApis = [
-                `https://discord.com/api/guilds/${DS_ID}/widget.json`,
-                `https://corsproxy.io/?url=https://discord.com/api/guilds/${DS_ID}/widget.json`,
-                `https://api.allorigins.win/raw?url=https://discord.com/api/guilds/${DS_ID}/widget.json`
-            ];
-            let dsOk = false;
-            for (const url of dsApis) {
-                try {
-                    const r = await fetch(url);
-                    const d = await r.json();
-                    if (d.presence_count !== undefined) {
-                        document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
-                        dsOk = true;
-                        break;
-                    }
-                } catch {}
-            }
-            if (!dsOk) document.getElementById('ds-status').textContent = 'Discord Activo';
+            document.getElementById('ds-status').textContent = `${DS_MEMBERS} Miembros`;
         }
         updateStats();
         setInterval(updateStats, 30000);
