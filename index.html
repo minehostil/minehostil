@@ -4,246 +4,452 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MineHostil | Servidor Oficial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --brand-color: #8591D6; 
-            --discord-color: #7289da;
-            --bg-dark: #8591D6; 
+            --brand: #8591D6;
+            --brand-dark: #6b77b8;
+            --brand-glow: rgba(133, 145, 214, 0.45);
+            --discord: #7289da;
+            --discord-dark: #5b6eae;
+            --bg-base: #0a0b10;
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-dark);
-            color: white; overflow-x: hidden;
+            height: 100%;
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--bg-base);
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* --- FONDO --- */
-        .background-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden;
+        /* ── FONDO ── */
+        .bg {
+            position: fixed; inset: 0; z-index: 0;
         }
 
-        .background-image {
+        .bg-img {
             width: 100%; height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                        url('https://drive.google.com/uc?export=view&id=1ld1cgiWvwKO5u02jZeEKNbl1AFlY-6Aj');
-            background-size: cover; background-position: center;
-            filter: blur(15px) brightness(0.6); transform: scale(1.1);
+            background:
+                linear-gradient(180deg, rgba(10,11,16,0.55) 0%, rgba(10,11,16,0.80) 100%),
+                url('https://cdn.discordapp.com/attachments/1321540704979390594/1504344460799250502/pack.png?ex=6a244f34&is=6a22fdb4&hm=b1d4e2c7b0d5442e45c0657dd1192a3a7063225b4ef0a965aebd84e5d4666277&');
+            background-size: cover;
+            background-position: center;
+            filter: blur(18px) brightness(0.55);
+            transform: scale(1.12);
         }
 
-        .main-wrapper {
-            position: relative; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; padding: 60px 20px 0 20px;
-            z-index: 1; box-sizing: border-box;
+        /* grid overlay sutil */
+        .bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(133,145,214,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(133,145,214,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* ── LAYOUT ── */
+        .wrapper {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+            padding: 56px 20px 40px;
+        }
+
+        /* ── LOGO ── */
+        .logo-wrap {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .logo-glow {
+            position: absolute; inset: -30px;
+            background: radial-gradient(ellipse at center, var(--brand-glow) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: pulse-glow 3.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50%       { opacity: 1;   transform: scale(1.12); }
         }
 
         .logo-main {
-            width: 350px; max-width: 80%;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9));
-            margin-bottom: 60px;
-            animation: float 3.5s ease-in-out infinite;
+            width: 310px; max-width: 78%;
+            position: relative;
+            filter: drop-shadow(0 12px 32px rgba(0,0,0,0.95));
+            animation: float 3.6s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-14px); }
         }
 
-        /* --- CONTADORES --- */
-        .stats-container {
-            display: flex; gap: 15px; margin-bottom: 80px; width: 100%; max-width: 450px;
+        /* ── TAGLINE ── */
+        .tagline {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 4px;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase;
+            margin-bottom: 44px;
         }
 
-        .count-box {
-            flex: 1; height: 85px; border-radius: 16px; font-weight: 800;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
+        /* ── STATS ── */
+        .stats-row {
+            display: flex; gap: 14px;
+            width: 100%; max-width: 440px;
+            margin-bottom: 48px;
         }
 
-        .mc-box { background: var(--brand-color); border-bottom: 4px solid #6b77b8; }
-        .ds-box { background: var(--discord-color); border-bottom: 4px solid #5b6eae; }
+        .stat-box {
+            flex: 1;
+            border-radius: 14px;
+            padding: 16px 10px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
 
-        .status-icon { font-size: 1.3rem; margin-bottom: 2px; }
-        .status-text { font-size: 0.8rem; letter-spacing: 0.5px; white-space: nowrap; }
+        .stat-box::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%);
+            pointer-events: none;
+        }
 
-        /* --- BOTONES --- */
-        .container { width: 100%; max-width: 450px; flex-grow: 1; }
-        .button-list { display: flex; flex-direction: column; gap: 25px; }
+        .stat-mc { background: linear-gradient(135deg, #6b77b8 0%, var(--brand) 100%); box-shadow: 0 6px 24px rgba(133,145,214,0.35); }
+        .stat-ds { background: linear-gradient(135deg, #5b6eae 0%, var(--discord) 100%); box-shadow: 0 6px 24px rgba(114,137,218,0.35); }
+
+        .stat-icon { font-size: 1.25rem; margin-bottom: 3px; }
+        .stat-label { font-size: 0.72rem; letter-spacing: 1.5px; opacity: 0.85; white-space: nowrap; }
+
+        /* ── BOTONES ── */
+        .btn-list {
+            display: flex; flex-direction: column; gap: 14px;
+            width: 100%; max-width: 440px;
+        }
 
         .btn {
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            padding: 22px; border-radius: 16px; text-decoration: none; color: white;
-            font-weight: 800; font-size: 1.1rem; transition: all 0.3s ease; cursor: pointer;
-            text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
-        }
-
-        .btn:hover { transform: translateY(-5px); filter: brightness(1.2); }
-        .btn-shop { background: #e67e22; border-bottom: 5px solid #d35400; }
-        .btn-vote { background: #2ecc71; border-bottom: 5px solid #27ae60; }
-        .btn-ip { background: #3498db; border-bottom: 5px solid #2980b9; position: relative; }
-        .btn-discord { background: #7289da; border-bottom: 5px solid #5b6eae; }
-        .btn-rules { background: #9b59b6; border-bottom: 5px solid #8e44ad; }
-        .btn-subtitle { font-size: 0.75rem; opacity: 0.9; margin-top: 4px; font-weight: 600; letter-spacing: 1px; }
-
-        .footer-text {
-            text-align: center; margin-top: 60px; padding-bottom: 15px;
-            font-size: 0.85rem; color: rgba(255, 255, 255, 0.85);
-            line-height: 1.6; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); max-width: 450px;
-        }
-        .footer-text b { font-size: 1rem; display: block; margin-bottom: 5px; }
-
-        /* --- MODALES CON ANIMACIÓN --- */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center;
-            backdrop-filter: blur(12px); opacity: 0; transition: opacity 0.3s ease;
-        }
-
-        .modal.active { display: flex; opacity: 1; }
-
-        .modal-content {
-            background: #111111; padding: 30px; border-radius: 25px; width: 90%; max-width: 600px; 
-            border: 3px solid var(--brand-color); box-shadow: 0 0 50px rgba(133, 145, 214, 0.4);
             display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px 24px;
+            border-radius: 14px;
+            text-decoration: none; color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 800; font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer; border: none;
+            position: relative; overflow: hidden;
+            transition: transform 0.25s cubic-bezier(.22,1,.36,1), filter 0.25s ease, box-shadow 0.25s ease;
+            letter-spacing: 0.5px;
         }
 
-        .modal.active .modal-content { animation: modalFadeIn 0.3s forwards; }
-        .modal.closing .modal-content { animation: modalFadeOut 0.3s forwards; }
-
-        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        @keyframes modalFadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.8); } }
-
-        .scrollable-content { max-height: 450px; overflow-y: auto; padding-right: 15px; }
-        .scrollable-content::-webkit-scrollbar { width: 6px; }
-        .scrollable-content::-webkit-scrollbar-thumb { background: var(--brand-color); border-radius: 10px; }
-
-        .item-list {
-            color: #ffffff; display: block; padding: 18px; border: 1px solid rgba(133, 145, 214, 0.3);
-            background: rgba(255,255,255,0.03); margin-bottom: 15px; border-radius: 12px; font-size: 0.9rem;
-            text-decoration: none; transition: 0.3s;
+        .btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 50%);
+            pointer-events: none;
         }
-        .item-list b { color: var(--brand-color); }
-        .btn-vote-link { text-align: center; font-weight: bold; color: var(--brand-color); border: 2px solid var(--brand-color); }
-        .btn-vote-link:hover { background: var(--brand-color); color: black; }
 
-        .btn-close-modal { background: var(--brand-color); color: black; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; margin-top: 15px; }
+        .btn:hover {
+            transform: translateY(-4px) scale(1.015);
+            filter: brightness(1.18);
+        }
 
-        #toast { visibility: hidden; background: white; color: black; padding: 8px 15px; position: absolute; top: -50px; border-radius: 8px; font-weight: bold; }
+        .btn:active { transform: translateY(1px) scale(0.99); filter: brightness(0.95); }
+
+        .btn-shop    { background: linear-gradient(135deg, #e67e22, #c0392b); box-shadow: 0 8px 28px rgba(230,126,34,0.40); }
+        .btn-vote    { background: linear-gradient(135deg, #27ae60, #1abc9c); box-shadow: 0 8px 28px rgba(46,204,113,0.35); }
+        .btn-ip      { background: linear-gradient(135deg, #2980b9, #1a6fa3); box-shadow: 0 8px 28px rgba(52,152,219,0.35); position: relative; }
+        .btn-discord { background: linear-gradient(135deg, #7289da, #5b6eae); box-shadow: 0 8px 28px rgba(114,137,218,0.40); }
+        .btn-rules   { background: linear-gradient(135deg, #8e44ad, #6c3483); box-shadow: 0 8px 28px rgba(155,89,182,0.35); }
+
+        .btn-sub { font-size: 0.68rem; font-weight: 600; letter-spacing: 2px; opacity: 0.8; margin-top: 4px; }
+
+        /* ── TOAST ── */
+        .toast {
+            position: absolute; top: -44px; left: 50%; transform: translateX(-50%);
+            background: white; color: #0a0b10;
+            padding: 6px 14px; border-radius: 8px;
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;
+            white-space: nowrap;
+            opacity: 0; transition: opacity 0.2s ease, top 0.2s ease;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; top: -38px; }
+
+        /* ── DIVIDER ── */
+        .divider {
+            width: 100%; max-width: 440px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(133,145,214,0.3), transparent);
+            margin: 8px 0;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            margin-top: 48px;
+            text-align: center;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.35);
+            line-height: 1.7;
+            max-width: 420px;
+        }
+
+        .footer strong { color: rgba(255,255,255,0.6); font-weight: 700; display: block; margin-bottom: 4px; font-size: 0.85rem; letter-spacing: 1px; }
+
+        /* ── MODALES ── */
+        .modal {
+            display: none;
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(14px) saturate(0.8);
+            align-items: center; justify-content: center;
+        }
+
+        .modal.open { display: flex; animation: modal-bg-in 0.25s ease forwards; }
+        .modal.closing { animation: modal-bg-out 0.25s ease forwards; }
+
+        @keyframes modal-bg-in  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modal-bg-out { from { opacity: 1; } to { opacity: 0; } }
+
+        .modal-box {
+            background: #0e0f17;
+            border: 1px solid rgba(133,145,214,0.25);
+            border-top: 3px solid var(--brand);
+            border-radius: 20px;
+            padding: 32px 28px 24px;
+            width: 92%; max-width: 540px;
+            box-shadow: 0 0 60px rgba(133,145,214,0.20), 0 30px 80px rgba(0,0,0,0.7);
+            animation: box-in 0.3s cubic-bezier(.22,1,.36,1) forwards;
+        }
+
+        .modal.closing .modal-box { animation: box-out 0.25s ease forwards; }
+
+        @keyframes box-in  { from { opacity:0; transform:scale(0.88) translateY(16px); } to { opacity:1; transform:scale(1) translateY(0); } }
+        @keyframes box-out { from { opacity:1; transform:scale(1); } to { opacity:0; transform:scale(0.9); } }
+
+        .modal-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.35rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: var(--brand); text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .scroll-area {
+            max-height: 400px; overflow-y: auto;
+            padding-right: 10px; margin-bottom: 18px;
+        }
+
+        .scroll-area::-webkit-scrollbar { width: 4px; }
+        .scroll-area::-webkit-scrollbar-track { background: transparent; }
+        .scroll-area::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 4px; }
+
+        .rule-card, .vote-card {
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: rgba(133,145,214,0.05);
+            border: 1px solid rgba(133,145,214,0.12);
+            margin-bottom: 10px;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .rule-card b, .vote-card b { color: var(--brand); }
+
+        .vote-card {
+            display: block; text-decoration: none; color: var(--brand);
+            text-align: center; font-weight: 800;
+            border-color: rgba(133,145,214,0.3);
+            transition: background 0.2s, color 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .vote-card:hover { background: var(--brand); color: #0a0b10; }
+
+        .btn-close {
+            width: 100%; padding: 14px;
+            border-radius: 10px;
+            background: var(--brand); color: #0a0b10;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 900; font-size: 0.85rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; border: none;
+            transition: filter 0.2s;
+        }
+        .btn-close:hover { filter: brightness(1.15); }
+
+        /* ── ENTRADA ── */
+        .wrapper > * {
+            animation: fade-up 0.5s ease both;
+        }
+        .logo-wrap  { animation-delay: 0.05s; }
+        .tagline    { animation-delay: 0.12s; }
+        .stats-row  { animation-delay: 0.18s; }
+        .btn-list   { animation-delay: 0.24s; }
+        .footer     { animation-delay: 0.30s; }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="background-container"><div class="background-image"></div></div>
+    <!-- Fondo -->
+    <div class="bg"><div class="bg-img"></div></div>
 
-    <div class="main-wrapper">
-        <img src="https://lh3.googleusercontent.com/d/1krBk83tS95K_iWX78hxJLqaaP0gCTv8l" alt="Logo" class="logo-main">
+    <!-- Contenido principal -->
+    <div class="wrapper">
 
-        <div class="stats-container">
-            <div class="count-box mc-box"><span class="status-icon">⛏️</span><span id="mc-status" class="status-text">Cargando...</span></div>
-            <div class="count-box ds-box"><span class="status-icon">👤</span><span id="ds-status" class="status-text">Cargando...</span></div>
+        <div class="logo-wrap">
+            <div class="logo-glow"></div>
+            <img
+                src="82214.png"
+                alt="MineHostil Logo"
+                class="logo-main"
+            >
         </div>
 
-        <div class="container">
-            <div class="button-list">
-                <a href="https://minehostil.tebex.io" target="_blank" class="btn btn-shop">🛒 Tienda Online</a>
-                <button onclick="openModal('voteModal')" class="btn btn-vote">🗳️ Votar por nosotros</button>
-                <button onclick="copyIP()" class="btn btn-ip">
-                    <div id="toast">¡IP COPIADA!</div>
-                    <span>📍 play.minehostil.org</span>
-                    <span class="btn-subtitle">PUERTO BEDROCK: 19132</span>
-                </button>
-                <a href="https://discord.gg/9renwtmV4N" target="_blank" class="btn btn-discord">💬 Discord Oficial</a>
-                <button onclick="openModal('rulesModal')" class="btn btn-rules">📜 Reglas del Servidor</button>
+        <p class="tagline">Servidor Oficial de Minecraft</p>
+
+        <div class="stats-row">
+            <div class="stat-box stat-mc">
+                <span class="stat-icon">⛏️</span>
+                <span id="mc-status" class="stat-label">Cargando...</span>
+            </div>
+            <div class="stat-box stat-ds">
+                <span class="stat-icon">👤</span>
+                <span id="ds-status" class="stat-label">Cargando...</span>
             </div>
         </div>
 
-        <div class="footer-text">
-            <b>MineHostil © 2026</b>
+        <div class="btn-list">
+            <a href="https://minehostil.tebex.io" target="_blank" class="btn btn-shop">🛒 Tienda Online</a>
+            <button onclick="openModal('voteModal')" class="btn btn-vote">🗳️ Votar por Nosotros</button>
+            <button onclick="copyIP()" class="btn btn-ip">
+                <span class="toast" id="toast">✅ IP COPIADA</span>
+                <span>📍 play.minehostil.org</span>
+                <span class="btn-sub">Puerto Bedrock: 19132</span>
+            </button>
+            <a href="https://discord.gg/9renwtmV4N" target="_blank" class="btn btn-discord">💬 Discord Oficial</a>
+            <div class="divider"></div>
+            <button onclick="openModal('rulesModal')" class="btn btn-rules">📜 Reglas del Servidor</button>
+        </div>
+
+        <div class="footer">
+            <strong>MineHostil © 2026</strong>
             Minehostil no está afiliado de ninguna manera con Minecraft, Mojang AB y/o Microsoft Corporation.
         </div>
+
     </div>
 
-    <div id="voteModal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align:center; color:var(--brand-color); margin-bottom:20px;">VOTACIONES</h2>
-            <div class="scrollable-content">
-                <a href="https://minecraft-mp.com/server-s343552" target="_blank" class="item-list btn-vote-link">Opción #1 - Minecraft MP</a>
-                <a href="https://www.minecraftiplist.com/server/Minehostil-37769/vote" target="_blank" class="item-list btn-vote-link">Opción #2 - IP List</a>
-                <a href="https://minecraftservers.org/server/673690" target="_blank" class="item-list btn-vote-link">Opción #3 - Servers.org</a>
-                <a href="https://topminecraftservers.org/server/40645" target="_blank" class="item-list btn-vote-link">Opción #4 - Top Servers</a>
-                <a href="https://servers-minecraft.net/server-minehostil.42064" target="_blank" class="item-list btn-vote-link">Opción #5 - Servers MC</a>
+    <!-- Modal Votaciones -->
+    <div id="voteModal" class="modal" onclick="handleOverlay(event,'voteModal')">
+        <div class="modal-box">
+            <p class="modal-title">🗳️ Votaciones</p>
+            <div class="scroll-area">
+                <a href="https://minecraft-mp.com/server-s343552" target="_blank" class="vote-card">Opción #1 — Minecraft MP</a>
+                <a href="https://www.minecraftiplist.com/server/Minehostil-37769/vote" target="_blank" class="vote-card">Opción #2 — IP List</a>
+                <a href="https://minecraftservers.org/server/673690" target="_blank" class="vote-card">Opción #3 — Servers.org</a>
+                <a href="https://topminecraftservers.org/server/40645" target="_blank" class="vote-card">Opción #4 — Top Servers</a>
+                <a href="https://servers-minecraft.net/server-minehostil.42064" target="_blank" class="vote-card">Opción #5 — Servers MC</a>
             </div>
-            <button class="btn-close-modal" onclick="closeModal('voteModal')">VOLVER</button>
+            <button class="btn-close" onclick="closeModal('voteModal')">Volver</button>
         </div>
     </div>
 
-    <div id="rulesModal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align:center; color:var(--brand-color); margin-bottom:20px;">REGLAMENTO</h2>
-            <div class="scrollable-content">
-                <div class="item-list">Promocionar cosas externas al servidor sin permiso del staff será totalmente sancionado. <b>(Mute 12hs)</b></div>
-                <div class="item-list">No está permitido acosar a jugadores para arruinar su experiencia, ya sea vía mensajes privados o chat global. <b>(Mute 12h)</b></div>
-                <div class="item-list">No permitimos amenazas de ningún tipo. De hacerlas directa o indirectamente, recibirás una sanción acorde a ella.</div>
-                <div class="item-list">Este servidor no es un sitio para promocionar o nombrar otros servidores, para ello tienen otros medios. <b>(Mute 6hs)</b></div>
-                <div class="item-list">Si eres baneado, no podrás entrar con otra cuenta. De hacerlo, serás sancionado nuevamente. <b>(Ban 4 días)</b></div>
-                <div class="item-list">Filtrar información de usuarios está prohibido. Serás inmediatamente agregado a la lista negra (Blacklist). <b>(Ban Perma)</b></div>
-                <div class="item-list">El robo o intento de robo de cuentas resultará en la expulsión permanente sin posibilidad de apelación. <b>(Blacklisted)</b></div>
-                <div class="item-list">No puedes usar multicuentas para crear nuevas protecciones. Si se descubre, la protección será eliminada.</div>
-                <div class="item-list"><b>DEFINICIÓN DE TPAKILL:</b><br>Si envías una solicitud de TPA es tu responsabilidad. Pero si hay un acuerdo mutuo (ayuda, trade, construcción) y te matan, se considera TPAKILL e ilegal.</div>
-                <div class="item-list">Las estafas o robos en Minehostil son y siempre serán <b>ILEGALES</b>. Realizar esta acción conlleva sanción.</div>
-                <div class="item-list">El uso de clientes para obtener contraseñas resultará en baneo permanente sin derecho a unban.</div>
-                <div class="item-list">Prohibido vender cuentas con RANGO para beneficio personal. El uso de cuentas ajenas conlleva sanción permanente.</div>
-                <div class="item-list">Sanciones del <b>AntiCheat</b> no son apelables (son kicks). No se devuelve inventario si mueres por esta causa.</div>
+    <!-- Modal Reglas -->
+    <div id="rulesModal" class="modal" onclick="handleOverlay(event,'rulesModal')">
+        <div class="modal-box">
+            <p class="modal-title">📜 Reglamento</p>
+            <div class="scroll-area">
+                <div class="rule-card">Promocionar cosas externas al servidor sin permiso del staff será sancionado. <b>(Mute 12hs)</b></div>
+                <div class="rule-card">No está permitido acosar a jugadores para arruinar su experiencia, ya sea por mensajes privados o chat global. <b>(Mute 12h)</b></div>
+                <div class="rule-card">No permitimos amenazas de ningún tipo. De hacerlas directa o indirectamente, recibirás una sanción acorde a ella.</div>
+                <div class="rule-card">Este servidor no es un sitio para promocionar o nombrar otros servidores. <b>(Mute 6hs)</b></div>
+                <div class="rule-card">Si eres baneado, no podrás entrar con otra cuenta. De hacerlo serás sancionado nuevamente. <b>(Ban 4 días)</b></div>
+                <div class="rule-card">Filtrar información de usuarios está prohibido. Serás inmediatamente agregado a la lista negra. <b>(Ban Perma)</b></div>
+                <div class="rule-card">El robo o intento de robo de cuentas resultará en expulsión permanente sin posibilidad de apelación. <b>(Blacklisted)</b></div>
+                <div class="rule-card">No puedes usar multicuentas para crear nuevas protecciones. Si se descubre, la protección será eliminada.</div>
+                <div class="rule-card"><b>DEFINICIÓN DE TPAKILL:</b> Si envías una solicitud de TPA es tu responsabilidad. Pero si hay un acuerdo mutuo (ayuda, trade, construcción) y te matan, se considera TPAKILL e ilegal.</div>
+                <div class="rule-card">Las estafas o robos en Minehostil son y siempre serán <b>ILEGALES</b>. Realizar esta acción conlleva sanción.</div>
+                <div class="rule-card">El uso de clientes para obtener contraseñas resultará en baneo permanente sin derecho a unban.</div>
+                <div class="rule-card">Prohibido vender cuentas con RANGO para beneficio personal. El uso de cuentas ajenas conlleva sanción permanente.</div>
+                <div class="rule-card">Sanciones del <b>AntiCheat</b> no son apelables (son kicks). No se devuelve inventario si mueres por esta causa.</div>
             </div>
-            <button class="btn-close-modal" onclick="closeModal('rulesModal')">HE LEÍDO LAS REGLAS</button>
+            <button class="btn-close" onclick="closeModal('rulesModal')">He leído las reglas</button>
         </div>
     </div>
 
     <script>
-        const mcIP = "play.minehostil.org";
-        const discordID = "1268063065961435227";
+        const MC_IP  = 'play.minehostil.org';
+        const DS_ID  = '1268063065961435227';
 
-        function openModal(id) { 
-            const modal = document.getElementById(id);
-            modal.classList.remove('closing');
-            modal.classList.add('active'); 
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.remove('active');
-                modal.classList.remove('closing');
-            }, 300);
-        }
-
+        /* ── Stats ── */
         async function updateStats() {
             try {
-                const resMC = await fetch(`https://api.mcsrvstat.us/2/${mcIP}`);
-                const dataMC = await resMC.json();
-                document.getElementById('mc-status').innerText = dataMC.online ? `${dataMC.players.online} CONECTADOS` : "OFFLINE";
-            } catch (e) { document.getElementById('mc-status').innerText = "ERROR"; }
+                const r = await fetch(`https://api.mcsrvstat.us/2/${MC_IP}`);
+                const d = await r.json();
+                document.getElementById('mc-status').textContent =
+                    d.online ? `${d.players.online} Conectados` : 'Offline';
+            } catch { document.getElementById('mc-status').textContent = 'Error'; }
 
             try {
-                const resDS = await fetch(`https://discord.com/api/guilds/${discordID}/widget.json`);
-                const dataDS = await resDS.json();
-                document.getElementById('ds-status').innerText = `${dataDS.presence_count} MIEMBROS`;
-            } catch (e) { document.getElementById('ds-status').innerText = "ACTIVO"; }
+                const r = await fetch(`https://discord.com/api/guilds/${DS_ID}/widget.json`);
+                const d = await r.json();
+                document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
+            } catch { document.getElementById('ds-status').textContent = 'Discord Activo'; }
         }
-
         updateStats();
         setInterval(updateStats, 30000);
 
+        /* ── Copiar IP ── */
         function copyIP() {
-            const el = document.createElement('textarea'); el.value = mcIP; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            const toast = document.getElementById('toast'); toast.style.visibility = 'visible'; setTimeout(() => { toast.style.visibility = 'hidden'; }, 2000);
+            navigator.clipboard?.writeText(MC_IP).catch(() => {
+                const el = document.createElement('textarea');
+                el.value = MC_IP; document.body.appendChild(el);
+                el.select(); document.execCommand('copy');
+                document.body.removeChild(el);
+            });
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        window.onclick = function(event) { if (event.target.classList.contains('modal')) { closeModal(event.target.id); } }
+        /* ── Modales ── */
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('closing');
+            m.classList.add('open');
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.classList.add('closing');
+            setTimeout(() => {
+                m.classList.remove('open', 'closing');
+            }, 250);
+        }
+
+        function handleOverlay(e, id) {
+            if (e.target === document.getElementById(id)) closeModal(id);
+        }
     </script>
 </body>
 </html>
