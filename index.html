@@ -185,15 +185,16 @@
 
         /* ── TOAST ── */
         .toast {
-            position: absolute; top: -44px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%) translateY(20px);
             background: white; color: #0a0b10;
-            padding: 6px 14px; border-radius: 8px;
-            font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;
-            white-space: nowrap;
-            opacity: 0; transition: opacity 0.2s ease, top 0.2s ease;
+            padding: 10px 22px; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 800; letter-spacing: 1.5px;
+            white-space: nowrap; z-index: 9999;
+            opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease;
             pointer-events: none;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.5);
         }
-        .toast.show { opacity: 1; top: -38px; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* ── DIVIDER ── */
         .divider {
@@ -417,8 +418,16 @@
             try {
                 const r = await fetch(`https://discord.com/api/guilds/${DS_ID}/widget.json`);
                 const d = await r.json();
-                document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
-            } catch { document.getElementById('ds-status').textContent = 'Discord Activo'; }
+                if (d.presence_count !== undefined) {
+                    document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
+                } else { throw new Error(); }
+            } catch {
+                try {
+                    const r2 = await fetch(`https://corsproxy.io/?https://discord.com/api/guilds/${DS_ID}/widget.json`);
+                    const d2 = await r2.json();
+                    document.getElementById('ds-status').textContent = `${d2.presence_count} en Discord`;
+                } catch { document.getElementById('ds-status').textContent = 'Discord Activo'; }
+            }
         }
         updateStats();
         setInterval(updateStats, 30000);
