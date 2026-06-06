@@ -420,19 +420,24 @@
                     d.online ? `${d.players.online} Conectados` : 'Offline';
             } catch { document.getElementById('mc-status').textContent = 'Error'; }
 
-            try {
-                const r = await fetch(`https://discord.com/api/guilds/${DS_ID}/widget.json`);
-                const d = await r.json();
-                if (d.presence_count !== undefined) {
-                    document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
-                } else { throw new Error(); }
-            } catch {
+            const dsApis = [
+                `https://discord.com/api/guilds/${DS_ID}/widget.json`,
+                `https://corsproxy.io/?url=https://discord.com/api/guilds/${DS_ID}/widget.json`,
+                `https://api.allorigins.win/raw?url=https://discord.com/api/guilds/${DS_ID}/widget.json`
+            ];
+            let dsOk = false;
+            for (const url of dsApis) {
                 try {
-                    const r2 = await fetch(`https://corsproxy.io/?https://discord.com/api/guilds/${DS_ID}/widget.json`);
-                    const d2 = await r2.json();
-                    document.getElementById('ds-status').textContent = `${d2.presence_count} en Discord`;
-                } catch { document.getElementById('ds-status').textContent = 'Discord Activo'; }
+                    const r = await fetch(url);
+                    const d = await r.json();
+                    if (d.presence_count !== undefined) {
+                        document.getElementById('ds-status').textContent = `${d.presence_count} en Discord`;
+                        dsOk = true;
+                        break;
+                    }
+                } catch {}
             }
+            if (!dsOk) document.getElementById('ds-status').textContent = 'Discord Activo';
         }
         updateStats();
         setInterval(updateStats, 30000);
